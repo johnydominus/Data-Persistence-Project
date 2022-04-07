@@ -31,6 +31,6 @@ public class Ball : MonoBehaviour
             velocity = velocity.normalized * 3.0f;
         }
 
-        m_Rigidbody.velocity = velocity;
+        m_Rigidbody.velocity = velocity * (DataHolder.dataHolder.difficulty * 0.66f);
     }
 }

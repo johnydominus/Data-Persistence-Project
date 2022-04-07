@@ -19,7 +19,7 @@ public class Paddle : MonoBehaviour
         float input = Input.GetAxis("Horizontal");
 
         Vector3 pos = transform.position;
-        pos.x += input * Speed * Time.deltaTime;
+        pos.x += input * Speed * DataHolder.dataHolder.difficulty * Time.deltaTime;
 
         if (pos.x > MaxMovement)
             pos.x = MaxMovement;
