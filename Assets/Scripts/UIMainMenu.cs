@@ -5,34 +5,31 @@ using System.IO;
 using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 public class UIMainMenu : MonoBehaviour
 {
-    public DataHolder dataHolder;
+    [SerializeField] TextMeshProUGUI UIPlayerName;
 
     void Start()
     {
         DataHolder.dataHolder.SetColor();
-        if(DataHolder.dataHolder.playersNameAndScore != null 
-           && DataHolder.dataHolder.playersNameAndScore.Item1 != null 
-           /*&& GameObject.Find("InputFieldText") != null*/)
-        {
-            GameObject.Find("InputFieldText").GetComponent<Text>().text = DataHolder.dataHolder.playersNameAndScore.Item1;
-        }
+        SetUIPlayerName();
     }
 
     public void StartGame()
     {
-        if(dataHolder.playersNameAndScore != null && dataHolder.playersNameAndScore.Item1.Length != 0)
+        if(DataHolder.dataHolder.playersNameAndScore != null
+           && DataHolder.dataHolder.playersNameAndScore.Item1.Length != 0)
         {
             SceneManager.LoadScene(1);
         }
         else
         {
-            dataHolder.ShowErrorMessage();
+            DataHolder.dataHolder.ShowErrorMessage();
         }
     }
 
@@ -53,6 +50,7 @@ public class UIMainMenu : MonoBehaviour
     
     public void Exit()
     {
+        DataHolder.dataHolder.SaveData();
     #if UNITY_EDITOR
         EditorApplication.ExitPlaymode();
     #else
@@ -64,11 +62,26 @@ public class UIMainMenu : MonoBehaviour
     {
         if(playerName.text.Length != 0)
         {
-            dataHolder.playersNameAndScore = new Tuple<string, int>(playerName.text, 0);
+            DataHolder.dataHolder.playersNameAndScore = new Tuple<string, int>(playerName.text, 0);
+            SetUIPlayerName();
         }
         else
         {
-            dataHolder.ShowErrorMessage();
+            DataHolder.dataHolder.ShowErrorMessage();
+        }
+    }
+
+    void SetUIPlayerName()
+    {
+        if(DataHolder.dataHolder.playersNameAndScore != null && DataHolder.dataHolder.playersNameAndScore.Item1.Length > 0)
+        {
+            UIPlayerName.color = new Color32(0, 254, 13, 255);
+            UIPlayerName.text = "Player: " + DataHolder.dataHolder.playersNameAndScore.Item1;
+        }
+        else
+        {
+            UIPlayerName.color = new Color32(255, 69, 69, 255);
+            UIPlayerName.text = "Enter player's name to play";;
         }
     }
 }
